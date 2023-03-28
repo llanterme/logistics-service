@@ -1,0 +1,61 @@
+server:
+  port: 1002
+spring:
+  application:
+    name: logistics-service
+
+  cloud:
+    function:
+      definition: order-consumer
+    stream:
+      bindings:
+        order-consumer-in-0:
+          destination: orders-topic
+          contentType: application/json
+          group: order-group
+
+    kafka:
+      binder:
+        brokers: localhost:9092
+      bindings:
+        order-consumer-in-0:
+          consumer:
+            ackMode: MANUAL
+            auto-offset-reset: latest
+
+
+  jpa:
+    database: MYSQL
+    openInView: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        jdbc:
+          batch_size: 25
+          batch_versioned_data: true
+          time_zone: UTC
+        order_inserts: true
+        order_updates: true
+        show_sql: false
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/logistics_db
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: Passw0rd1
+
+
+cloud:
+  aws:
+    sqs:
+      logistics-process-queue-name: "https://sqs.eu-west-2.amazonaws.com/634182598822/logistics-process-sqs"
+      endpoint: sqs.ap-southeast-1.amazonaws.com
+
+
+
+
+
+
+
+
+
