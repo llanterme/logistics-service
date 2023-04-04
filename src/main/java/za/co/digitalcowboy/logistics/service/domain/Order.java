@@ -1,9 +1,15 @@
 package za.co.digitalcowboy.logistics.service.domain;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
+
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @SuperBuilder
@@ -11,13 +17,16 @@ import lombok.extern.jackson.Jacksonized;
 @ToString(onlyExplicitlyIncluded = true)
 public class Order {
 
-    @ToString.Include
-    private Long orderId;
-    @ToString.Include
+    private Long id;
+    private UUID orderId;
     private String orderType;
-    @ToString.Include
     private String orderMessage;
-    @ToString.Include
     private String orderStatus;
+
+    @CurrentDateTimeRange(numberOfDays = 30)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @NotNull
+    private LocalDateTime createdDate;
 
 }

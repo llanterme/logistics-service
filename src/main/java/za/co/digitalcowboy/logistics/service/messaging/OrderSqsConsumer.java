@@ -25,13 +25,13 @@ public class OrderSqsConsumer extends AbstractInboxConsumer<Order, OrderContext>
 
   @SqsListener(value = "${cloud.aws.sqs.logistics-process-queue-name}", deletionPolicy = SqsMessageDeletionPolicy.DEFAULT)
   public void consume(String message) {
-    consume(message, accountType);
+    super.consume(message, accountType);
   }
+
 
   @Override
   protected void process(Event<Order, OrderContext> event) {
     orderService.processOrder(event);
-
 
     }
   }

@@ -35,7 +35,6 @@ public abstract class AbstractInboxConsumer<D, C> {
   @Autowired
   private InboxService inboxService;
 
-  protected abstract void consume(String message);
 
   protected abstract void process(Event<D,C> event);
 
